@@ -84,9 +84,7 @@ export function Form({
     register,
   } = formProps;
 
-  const onSubmit: SubmitHandler<FormValues> = async (
-    data,
-  ): Promise<void> => {
+  const onSubmit: SubmitHandler<FormValues> = async (data): Promise<void> => {
     const { keywords, mediaType, yearStart } = data;
     setValues({
       keywords,

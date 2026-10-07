@@ -18,5 +18,5 @@ export const urlNasaSearch = ({
   const paramsString = new URLSearchParams(
     paramsObjectWithSnakeCaseKeys,
   ).toString();
-  return `${NASA_API_URL + "3"}?${paramsString}`;
+  return `${NASA_API_URL}?${paramsString}`;
 };

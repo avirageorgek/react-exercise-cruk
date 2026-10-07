@@ -16,7 +16,7 @@ export type NasaResponse = {
 export type ItemsType = {
   href: string;
   data: DataType[];
-  links: LinkType[];
+  links?: LinkType[];
 };
 
 export type DataType = {
