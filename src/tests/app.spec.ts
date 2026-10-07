@@ -1,5 +1,11 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { NasaResponse } from "../types";
+import { NASA_API_URL } from "../services/nasa";
+
+const emptySearchResponse: NasaResponse = {
+  collection: { version: "1.0", href: "", items: [] },
+};
 
 test.describe("HomePage tests", () => {
   test.beforeEach(async ({ page }) => {
@@ -93,5 +99,26 @@ test.describe("HomePage tests", () => {
     await expect(
       page.getByText("Please select a media type."),
     ).not.toBeVisible();
+  });
+
+  test("can submit form with valid inputs and see results", async ({
+    page,
+  }) => {
+    await page.getByLabel("Keywords").fill("moon");
+    await page.getByLabel("Media type").selectOption("image");
+    await page.getByLabel("Year start").fill("2000");
+    await page.route(`${NASA_API_URL}*`, (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify(emptySearchResponse),
+      });
+    });
+    const requestPromise = page.waitForRequest(`${NASA_API_URL}*`);
+    await page.getByRole("button", { name: "Submit" }).click();
+    const request = await requestPromise;
+    const requestUrl = new URL(request.url());
+    expect(requestUrl.searchParams.get("keywords")).toBe("moon");
+    expect(requestUrl.searchParams.get("media_type")).toBe("image");
+    expect(requestUrl.searchParams.get("year_start")).toBe("2000");
   });
 });
