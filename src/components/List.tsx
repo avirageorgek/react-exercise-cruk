@@ -5,23 +5,23 @@ import { NasaResponse, NasaSearchParams } from "../types";
 import { urlNasaSearch } from "../services/nasa";
 import { useQuery } from "@tanstack/react-query";
 
-export function List() {
-  const values: NasaSearchParams = {
-    keywords: "moon",
-    mediaType: "audio",
-    yearStart: 2000,
-  };
+type ListProps = {
+  values: NasaSearchParams;
+};
+
+export function List(props: ListProps) {
+  const values: NasaSearchParams = props.values;
 
   const urlNasaSearchUrl = values
     ? urlNasaSearch(values as NasaSearchParams)
     : "";
 
-  console.log(urlNasaSearchUrl);
-
   const { data } = useQuery<NasaResponse>(
     ["nasaSearch", values],
-    () => fetch(urlNasaSearchUrl).then((res) => res.json()),
-    { enabled: !!urlNasaSearchUrl.length },
+    () => fetch(urlNasaSearchUrl).then((res) => {
+      if (!res.ok) throw new Error("Failed to fetch the details from NASA");
+      return res.json();
+    }),
   );
 
   // TODO somehow render results

@@ -86,10 +86,14 @@ export function Form({
 
   const onSubmit: SubmitHandler<FormValues> = async (
     data,
-    e,
   ): Promise<void> => {
-    console.log({ data });
-    // TODO do something on sumbit
+    const { keywords, mediaType, yearStart } = data;
+    setValues({
+      keywords,
+      mediaType,
+      yearStart: yearStart ? Number(yearStart) : undefined,
+      pageSize: 10,
+    });
   };
 
   return (
