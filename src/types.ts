@@ -1,7 +1,7 @@
 export type NasaSearchParams = {
   keywords: string;
   yearStart?: number;
-  mediaType: "audio" | "video" | "image";
+  mediaType: MediaType;
   pageSize?: number;
 };
 
@@ -26,7 +26,7 @@ export type DataType = {
   location: string;
   nasa_id: string;
   date_created: string;
-  media_type: string;
+  media_type: MediaType;
   description: string;
 };
 
@@ -34,4 +34,18 @@ export type LinkType = {
   href: string;
   rel: string;
   render: string;
+};
+
+export type MediaType = "audio" | "video" | "image";
+
+export type AssetNasaResponse = {
+  collection: {
+    version: string;
+    href: string;
+    items: AssetType[];
+  };
+};
+
+export type AssetType = {
+  href: string;
 };

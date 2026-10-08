@@ -40,7 +40,12 @@ const MediaDetails = styled.div`
   min-width: 0;
 `;
 
-export function MediaCard(item: ItemsType) {
+type MediaCardProps = {
+  item: ItemsType;
+  onSelectItem: (item: ItemsType) => void;
+};
+
+export function MediaCard({ item, onSelectItem }: MediaCardProps) {
   const mediaTitle = item.data[0]?.title;
   const mediaType = item.data[0]?.media_type;
 
@@ -67,7 +72,7 @@ export function MediaCard(item: ItemsType) {
   return (
     <MediaContainer
       onClick={() => {
-        //TODO: Implement click functionality to open modal with media details
+        onSelectItem(item);
       }}
     >
       <PreviewMedia type="button" aria-label={previewLabel}>

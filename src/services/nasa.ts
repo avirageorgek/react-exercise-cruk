@@ -1,6 +1,7 @@
 import { NasaSearchParams } from "../types";
 
 export const NASA_API_URL = "https://images-api.nasa.gov/search";
+export const NASA_ASSETS_URL = "https://images-api.nasa.gov/asset";
 
 export const urlNasaSearch = ({
   keywords,
