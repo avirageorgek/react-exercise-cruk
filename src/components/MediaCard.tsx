@@ -14,6 +14,11 @@ const MediaContainer = styled.li<{ theme: ThemeType }>`
   border-radius: 8px;
   width: 100%;
   align-items: start;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: ${({ theme }) => theme.shadows.m};
+  }
   @media (min-width: ${({ theme }) => theme.breakpoint.tablet}) {
     grid-template-columns: 200px 1fr;
   }
