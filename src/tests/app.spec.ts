@@ -181,4 +181,23 @@ test.describe("HomePage tests", () => {
     await page.getByRole("button", { name: "Submit" }).click();
     await expect(page.getByText("No results found")).toBeVisible();
   });
+
+  test("shows a modal when user click on a list item", async ({ page }) => {
+    await page.route(`${NASA_API_URL}*`, (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify(searchImageResults),
+      });
+    });
+    await page.getByLabel("Keywords").fill("moon");
+    await page.getByLabel("Media type").selectOption("image");
+    await page.getByLabel("Year start").fill("2000");
+    await page.getByRole("button", { name: "Submit" }).click();
+    const results = page.getByRole("main").getByRole("listitem");
+    await expect(results).toHaveCount(2);
+    await page.getByRole("button", { name: "Apollo 11 footprint" }).click()
+
+    const modal = page.getByRole("dialog", { name: "Apollo 11 footprint" })
+    await expect(modal).toBeVisible()
+  });
 });
