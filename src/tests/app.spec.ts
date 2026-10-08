@@ -189,6 +189,12 @@ test.describe("HomePage tests", () => {
         body: JSON.stringify(searchImageResults),
       });
     });
+    await page.route(`${NASA_ASSETS_URL}*`, (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify({}),
+      });
+    });
     await page.getByLabel("Keywords").fill("moon");
     await page.getByLabel("Media type").selectOption("image");
     await page.getByLabel("Year start").fill("2000");
