@@ -69,7 +69,11 @@ Added 13 Playwright tests with a mocked NASA API. The test covers:
 
  
 
-## Task details
+
+
+# Original task
+
+### Task details
 
 - We will be testing your ability to understand an existing React/Typescript codebase, find what is already built, and what is not.
 - You will be building a form using the CRUK React Component Library controlled by ReactHookForm which uses a Zod validation schema.
@@ -81,7 +85,7 @@ Added 13 Playwright tests with a mocked NASA API. The test covers:
 - Feel free to edit this readme or add a new readme file for any additional information, such as what you might do improve your application in the future.
 - Please do not attempt to push to this repo, please create your own fork.
 
-## Tools to be used
+### Tools to be used
 
 - NextJS (server) https://nextjs.org/docs
 - NASA Images and Video Library API https://api.nasa.gov/
@@ -91,11 +95,11 @@ Added 13 Playwright tests with a mocked NASA API. The test covers:
 - React Hook Form (forms): https://react-hook-form.com/
 - Zod (validation) https://zod.dev/
 
-## Form fields
+### Form fields
 
 This form has 3 fields and error messages should appear below each field.
 
-### Keywords field
+#### Keywords field
 
 | Attribute | Value    |
 | :-------- | :------- |
@@ -105,7 +109,7 @@ This form has 3 fields and error messages should appear below each field.
 | Type      | text     |
 | Default   | ""       |
 
-### Keywords validation
+#### Keywords validation
 
 | Type       | Value | Message                                     |
 | :--------- | :---- | :------------------------------------------ |
@@ -114,7 +118,7 @@ This form has 3 fields and error messages should appear below each field.
 
 An error message should appear below the field
 
-### Media type field
+#### Media type field
 
 | Attribute | Value                       |
 | :-------- | :-------------------------- |
@@ -125,13 +129,13 @@ An error message should appear below the field
 | Values    | [“audio”, “video”, “image”] |
 | Default   | ""                          |
 
-### Media types validation
+#### Media types validation
 
 | Type     | Value             | Message                       |
 | :------- | :---------------- | :---------------------------- |
 | if unset | null or undefined | "Please select a media type." |
 
-### Year start field
+#### Year start field
 
 | Attribute | Value      |
 | :-------- | :--------- |
@@ -141,48 +145,10 @@ An error message should appear below the field
 | Type      | text       |
 | Default   | ""         |
 
-### Year start validation
+#### Year start validation
 
 | Type        | Value                  | Message                                 |
 | :---------- | :--------------------- | :-------------------------------------- |
 | number type | any non digit charater | "Please enter a valid number."          |
 | min         | 1900                   | "Year start must be after 1900."        |
 | max         | current year           | "Year start must not be in the future." |
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to view your application.
-
-The page auto-updates as you edit the files.
-
-## Testing
-
-To test your code run:
-
-```bash
-npm run test:debug
-```
-
-This will open up a browser window to show you your test in action
-The page will auto-update as you edit files.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
