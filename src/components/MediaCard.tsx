@@ -51,9 +51,7 @@ export function MediaCard(item: ItemsType) {
     : "";
 
   const renderPreviewMedia = (item: ItemsType) => {
-    const previewUrl = item.links?.find(
-          (link) => link.rel === "preview",
-        )?.href;
+    const previewUrl = item.links?.find((link) => link.rel === "preview")?.href;
 
     switch (mediaType) {
       case "image":

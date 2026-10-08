@@ -13,9 +13,9 @@ type ListProps = {
 
 const MediaList = styled.ul`
   list-style: none;
-  padding:0;
+  padding: 0;
   margin: 0;
-`
+`;
 
 export function List(props: ListProps) {
   const values: NasaSearchParams = props.values;

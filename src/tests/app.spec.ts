@@ -2,6 +2,13 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { NasaResponse } from "../types";
 import { NASA_API_URL } from "../services/nasa";
+import {
+  searchImageResults,
+  searchVideoResults,
+  NASA_ASSETS_URL,
+  searchAudioResults,
+  emptySearchResult,
+} from "./fixtures/nasaSearch";
 
 const emptySearchResponse: NasaResponse = {
   collection: { version: "1.0", href: "", items: [] },
@@ -9,6 +16,9 @@ const emptySearchResponse: NasaResponse = {
 
 test.describe("HomePage tests", () => {
   test.beforeEach(async ({ page }) => {
+    await page.route(`${NASA_ASSETS_URL}/**`, (route) => {
+      route.abort();
+    });
     await page.goto("/");
   });
 
@@ -76,31 +86,6 @@ test.describe("HomePage tests", () => {
     await expect(page.getByText("Please select a media type.")).toBeVisible();
   });
 
-  test("can submit form with valid inputs", async ({ page }) => {
-    await page.getByLabel("Keywords").fill("moon");
-    await page.getByLabel("Media type").selectOption("image");
-    await page.getByLabel("Year start").fill("2000");
-    await page.getByRole("button", { name: "Submit" }).click();
-    await expect(
-      page.getByText("keywords must have at least 2 characters."),
-    ).not.toBeVisible();
-    await expect(
-      page.getByText("keywords must have at most 50 characters."),
-    ).not.toBeVisible();
-    await expect(
-      page.getByText("Year start must be after 1900."),
-    ).not.toBeVisible();
-    await expect(
-      page.getByText("Year start must not be in the future."),
-    ).not.toBeVisible();
-    await expect(
-      page.getByText("Please enter a valid number."),
-    ).not.toBeVisible();
-    await expect(
-      page.getByText("Please select a media type."),
-    ).not.toBeVisible();
-  });
-
   test("can submit form with valid inputs and see results", async ({
     page,
   }) => {
@@ -120,5 +105,80 @@ test.describe("HomePage tests", () => {
     expect(requestUrl.searchParams.get("keywords")).toBe("moon");
     expect(requestUrl.searchParams.get("media_type")).toBe("image");
     expect(requestUrl.searchParams.get("year_start")).toBe("2000");
+  });
+
+  test("shows search results for image search", async ({ page }) => {
+    await page.route(`${NASA_API_URL}*`, (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify(searchImageResults),
+      });
+    });
+    await page.getByLabel("Keywords").fill("moon");
+    await page.getByLabel("Media type").selectOption("image");
+    await page.getByLabel("Year start").fill("2000");
+    await page.getByRole("button", { name: "Submit" }).click();
+    const results = page.getByRole("main").getByRole("listitem");
+    await expect(results).toHaveCount(2);
+    await expect(
+      page.getByRole("heading", { name: "Apollo 11 footprint" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Apollo 13 footprint" }),
+    ).toBeVisible();
+  });
+
+  test("shows search results for video search", async ({ page }) => {
+    await page.route(`${NASA_API_URL}*`, (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify(searchVideoResults),
+      });
+    });
+
+    await page.getByLabel("Keywords").fill("moon");
+    await page.getByLabel("Media type").selectOption("video");
+    await page.getByRole("button", { name: "Submit" }).click();
+    const result = page.getByRole("main").getByRole("listitem");
+
+    await expect(result).toHaveCount(2);
+    await expect(
+      page.getByRole("heading", { name: "Apollo 11 video footprint" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Apollo 13 video footprint" }),
+    ).toBeVisible();
+  });
+
+  test("shows search results for audio search", async ({ page }) => {
+    await page.route(`${NASA_API_URL}*`, (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify(searchAudioResults),
+      });
+    });
+
+    await page.getByLabel("Keywords").fill("moon");
+    await page.getByLabel("Media type").selectOption("audio");
+    await page.getByRole("button", { name: "Submit" }).click();
+    const result = page.getByRole("main").getByRole("listitem");
+
+    await expect(result).toHaveCount(1);
+    await expect(
+      page.getByRole("heading", { name: "Apollo 13 audio footprint" }),
+    ).toBeVisible();
+  });
+
+  test("shows a message when there are no results", async ({ page }) => {
+    await page.route(`${NASA_API_URL}*`, (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify(emptySearchResult),
+      });
+    });
+    await page.getByLabel("Keywords").fill("gdfgsdjgfjgdsfgds");
+    await page.getByLabel("Media type").selectOption("image");
+    await page.getByRole("button", { name: "Submit" }).click();
+    await expect(page.getByText("No results found")).toBeVisible();
   });
 });
