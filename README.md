@@ -47,8 +47,12 @@ Identified that the page is visible before React  finished loading, and this cau
 ### Linting
 The project's lint command (`npm run lint`) didn't work out of the box: it relies on a package that isn't installed. When I tried installing it, it needed more setup and then flagged existing issues in the setup files, which would also have stopped the build. Rather than spend the time fixing the starter's setup, I kept my changes focused and used Prettier (npx prettier --write src) for formatting and the TypeScript compiler (`npx tsc --noEmit`) to catch errors instead.
 
+### the first submit after an error is ignored
+After a failed submit, if user fix the form and click Submit sometimes did nothing until a second click. Errors were being re-checked when a field lost focus, so pressing Submit removed an error message, the button moved up, and the click no longer landed on it. I changed `reValidateMode` to `onChange`, so errors clear while the user fixes them.
+
+
 ### Very large media files
-NASA lists the original files first, and they can be huge (one video was 168 MB). The modal picks a web-sized version in order of preference (for example `~mobile.mp4`, about 3 MB) and switches links to `https`.
+NASA lists the original files first, and they can be huge. I have added logic such that modal picks a web-sized version in order of preference (for example `~mobile.mp4`) and switches links to `https`.
 
 ## Testing
 Added 13 Playwright tests with a mocked NASA API. The test covers: 
