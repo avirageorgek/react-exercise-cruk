@@ -45,7 +45,9 @@ Playwright tests were flaky: a value typed into the form sometimes disappeared.
 Identified that the page is visible before React  finished loading, and this caused React Hook Form to reset the fields when it loads, this wiped anything typed earlier. Real users on slow devices would lose their input too. I keep the fields disabled until the form is ready; Playwright then waits automatically.
 
 ### Linting
-The project's lint command (`npm run lint`) didn't work out of the box: it relies on a package that isn't installed. When I tried installing it, it needed more setup and then flagged existing issues in the setup files, which would also have stopped the build. Rather than spend the time fixing the starter's setup, I kept my changes focused and used Prettier (npx prettier --write src) for formatting and the TypeScript compiler (`npx tsc --noEmit`) to catch errors instead.
+`npm run lint` doesn't work in the starter project because a required package (`eslint-config-next`) is missing.
+
+I tried fixing it on a separate branch. It needed the missing package, an extra config setting, and it needs fixes for about 11 lint errors, mostly in the tests. It might also change how the build behaves, so I decided it was out of scope for this exercise. Instead, I used Prettier and `npx tsc --noEmit` to keep the code clean. Fixing lint is first on my "With more time" list.
 
 ### the first submit after an error is ignored
 After a failed submit, if user fix the form and click Submit sometimes did nothing until a second click. Errors were being re-checked when a field lost focus, so pressing Submit removed an error message, the button moved up, and the click no longer landed on it. I changed `reValidateMode` to `onChange`, so errors clear while the user fixes them.
@@ -64,8 +66,8 @@ Added 13 Playwright tests with a mocked NASA API. The test covers:
 
 
 ## With more time
-1. Pagination using NASA's `page` parameter and total number of hits
-2. Fix the lint setup properly
+1. Fix the lint setup properly
+2. Pagination using NASA's `page` parameter and total number of hits
 3. Will fix `npm audit`  critical dependency findings in the npm packages
 4. More tests: error states, closing the modal with Esc, mobile layout
 5. Upgrade to CRUK React Components v7 using their migration guide
