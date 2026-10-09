@@ -1,4 +1,4 @@
-import type { ItemsType, NasaResponse } from "../../types";
+import { type ItemsType, type NasaResponse } from "../../types";
 
 export const NASA_ASSETS_URL = "https://images-assets.nasa.gov";
 const nasaIdImage1 = "fake-nasa-id1";

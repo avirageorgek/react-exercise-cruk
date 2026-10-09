@@ -1,5 +1,10 @@
 import { Modal, Heading, Text, Loader } from "@cruk/cruk-react-components";
-import { AssetNasaResponse, LinkType, MediaType, AssetType } from "../types";
+import {
+  type AssetNasaResponse,
+  type LinkType,
+  type MediaType,
+  type AssetType,
+} from "../types";
 import styled from "styled-components";
 import { NASA_ASSETS_URL } from "../services/nasa";
 import { useQuery } from "@tanstack/react-query";
@@ -61,7 +66,7 @@ export function MediaModal({
     async () => {
       const res = await fetch(`${NASA_ASSETS_URL}/${nasaId}`);
       if (!res.ok) throw new Error("An error occured while fetching details");
-      const result: AssetNasaResponse = await res.json();
+      const result = (await res.json()) as AssetNasaResponse;
       const items = result.collection.items;
       return filterFile(items, mediaType);
     },
@@ -78,6 +83,9 @@ export function MediaModal({
 
     switch (mediaType) {
       case "image":
+        // A static export has no server for next/image optimisation, and the
+        // file list already includes a web-sized version of the image.
+        // eslint-disable-next-line @next/next/no-img-element
         return <img src={mediaUrl} alt={title} loading="lazy" />;
       case "audio":
         return <audio controls src={mediaUrl} />;

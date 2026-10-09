@@ -6,6 +6,7 @@
 
 - `npm install`, then `npm run dev` and open http://localhost:3000
 - `npm run test` runs the Playwright tests (Chromium and Mobile Safari). The NASA API is mocked, so tests don't depend on the live service.
+- `npm run lint` checks the code with ESLint
 
 ## What I built
 1. A search form using the CRUK Library's `TextField` and `Select` components, also used  React Hook Form and Zod, with the exact validation messages from the README.
@@ -45,11 +46,16 @@ Playwright tests were flaky: a value typed into the form sometimes disappeared.
 Identified that the page is visible before React  finished loading, and this caused React Hook Form to reset the fields when it loads, this wiped anything typed earlier. Real users on slow devices would lose their input too. I keep the fields disabled until the form is ready; Playwright then waits automatically.
 
 ### Linting
-`npm run lint` doesn't work in the starter project because a required package (`eslint-config-next`) is missing.
+`npm run lint` didn't work in the starter project because a required package (`eslint-config-next`) was missing. I installed it as a dev dependency and set the Jest version in `.eslintrc.js` (CRUK's shared config turns on Jest rules, but this project uses Playwright).
 
-I tried fixing it on a separate branch. It needed the missing package, an extra config setting, and it needs fixes for about 11 lint errors, mostly in the tests. It might also change how the build behaves, so I decided it was out of scope for this exercise. Instead, I used Prettier and `npx tsc --noEmit` to keep the code clean. Fixing lint is first on my "With more time" list.
+Lint then reported 29 errors. ESLint fixed 18 of them automatically. I fixed the other 11 in the code rather than switching rules off so that the code is production ready:
+- test route handlers now return their promises
+- the form's submit handler handles React Hook Form's promise explicitly
+- the NASA response is typed instead of using `any`
 
-### the first submit after an error is ignored
+Linting now also runs as part of `npm run build`, so new lint errors stop a deploy.
+
+### The first submit after an error is ignored
 After a failed submit, if user fix the form and click Submit sometimes did nothing until a second click. Errors were being re-checked when a field lost focus, so pressing Submit removed an error message, the button moved up, and the click no longer landed on it. I changed `reValidateMode` to `onChange`, so errors clear while the user fixes them.
 
 
@@ -66,14 +72,11 @@ Added 13 Playwright tests with a mocked NASA API. The test covers:
 
 
 ## With more time
-1. Fix the lint setup properly
-2. Pagination using NASA's `page` parameter and total number of hits
-3. Will fix `npm audit`  critical dependency findings in the npm packages
-4. More tests: error states, closing the modal with Esc, mobile layout
-5. Upgrade to CRUK React Components v7 using their migration guide
-6. Reduce search retries to one (React Query retries three times by default, delaying errors; the modal already uses one retry)
-
- 
+1. Pagination using NASA's `page` parameter and total number of hits
+2. Will fix `npm audit`  critical dependency findings in the npm packages
+3. More tests: error states, closing the modal with Esc, mobile layout
+4. Upgrade to CRUK React Components v7 using their migration guide
+5. Reduce search retries to one (React Query retries three times by default, delaying errors; the modal already uses one retry)
 
 
 

@@ -1,7 +1,11 @@
 "use client";
 
 import { Loader, InfoBox } from "@cruk/cruk-react-components";
-import { NasaResponse, NasaSearchParams, ItemsType } from "../types";
+import {
+  type NasaResponse,
+  type NasaSearchParams,
+  type ItemsType,
+} from "../types";
 import { urlNasaSearch } from "../services/nasa";
 import { useQuery } from "@tanstack/react-query";
 import { MediaCard } from "./MediaCard";
@@ -24,9 +28,7 @@ export function List(props: ListProps) {
   const values: NasaSearchParams = props.values;
   const [selectedItem, setSelectItem] = useState<ItemsType | null>();
 
-  const urlNasaSearchUrl = values
-    ? urlNasaSearch(values as NasaSearchParams)
-    : "";
+  const urlNasaSearchUrl = values ? urlNasaSearch(values) : "";
 
   const { data, isLoading, isError } = useQuery<NasaResponse>(
     ["nasaSearch", values],

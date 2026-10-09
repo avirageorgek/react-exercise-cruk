@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import {
   Box,
@@ -9,7 +9,7 @@ import {
   GlobalStyle,
   Header,
   Link,
-  ThemeType,
+  type ThemeType,
 } from "@cruk/cruk-react-components";
 
 import { ReactQueryProvider } from "../contexts/ReactQueryProvider";

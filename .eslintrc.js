@@ -8,5 +8,9 @@ module.exports = {
   rules: {
     // It's ok to have dev dependencies imported for test files
   },
+  settings: {
+    // The @cruk config enables eslint-plugin-jest rules; this project uses Playwright, not Jest
+    jest: { version: 29 },
+  },
   ignorePatterns: ["*.config.js", "node_modules"],
 };

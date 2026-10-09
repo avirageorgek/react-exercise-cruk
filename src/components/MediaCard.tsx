@@ -1,6 +1,6 @@
-import { ItemsType } from "../types";
+import { type ItemsType } from "../types";
 import { styled } from "styled-components";
-import { ThemeType, Text, Heading } from "@cruk/cruk-react-components";
+import { type ThemeType, Text, Heading } from "@cruk/cruk-react-components";
 import { formatDate } from "../utils/formatDate";
 
 const MediaContainer = styled.li<{ theme: ThemeType }>`

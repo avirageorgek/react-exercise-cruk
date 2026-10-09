@@ -1,11 +1,11 @@
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Box, Button, TextField, Select } from "@cruk/cruk-react-components";
-import { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { type Dispatch, type SetStateAction, useState, useEffect } from "react";
 import styled from "styled-components";
-import { NasaSearchParams } from "../types";
+import { type NasaSearchParams } from "../types";
 
 const FieldSet = styled.fieldset`
   border: none;
@@ -84,7 +84,7 @@ export function Form({
     register,
   } = formProps;
 
-  const onSubmit: SubmitHandler<FormValues> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     const { keywords, mediaType, yearStart } = data;
     setValues({
       keywords,
@@ -96,7 +96,7 @@ export function Form({
 
   return (
     <>
-      <form noValidate onSubmit={handleSubmit(onSubmit)}>
+      <form noValidate onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
         <FieldSet disabled={!isHydrated}>
           <Box marginBottom="m">
             <TextField

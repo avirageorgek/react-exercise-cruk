@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { NasaResponse } from "../types";
+import { type NasaResponse } from "../types";
 import { NASA_API_URL } from "../services/nasa";
 import {
   searchImageResults,
@@ -17,7 +17,7 @@ const emptySearchResponse: NasaResponse = {
 test.describe("HomePage tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.route(`${NASA_ASSETS_URL}/**`, (route) => {
-      route.abort();
+      return route.abort();
     });
     await page.goto("/");
   });
@@ -93,7 +93,7 @@ test.describe("HomePage tests", () => {
     await page.getByLabel("Media type").selectOption("image");
     await page.getByLabel("Year start").fill("2000");
     await page.route(`${NASA_API_URL}*`, (route) => {
-      route.fulfill({
+      return route.fulfill({
         status: 200,
         body: JSON.stringify(emptySearchResponse),
       });
@@ -109,7 +109,7 @@ test.describe("HomePage tests", () => {
 
   test("shows search results for image search", async ({ page }) => {
     await page.route(`${NASA_API_URL}*`, (route) => {
-      route.fulfill({
+      return route.fulfill({
         status: 200,
         body: JSON.stringify(searchImageResults),
       });
@@ -130,7 +130,7 @@ test.describe("HomePage tests", () => {
 
   test("shows search results for video search", async ({ page }) => {
     await page.route(`${NASA_API_URL}*`, (route) => {
-      route.fulfill({
+      return route.fulfill({
         status: 200,
         body: JSON.stringify(searchVideoResults),
       });
@@ -152,7 +152,7 @@ test.describe("HomePage tests", () => {
 
   test("shows search results for audio search", async ({ page }) => {
     await page.route(`${NASA_API_URL}*`, (route) => {
-      route.fulfill({
+      return route.fulfill({
         status: 200,
         body: JSON.stringify(searchAudioResults),
       });
@@ -171,7 +171,7 @@ test.describe("HomePage tests", () => {
 
   test("shows a message when there are no results", async ({ page }) => {
     await page.route(`${NASA_API_URL}*`, (route) => {
-      route.fulfill({
+      return route.fulfill({
         status: 200,
         body: JSON.stringify(emptySearchResult),
       });
@@ -184,13 +184,13 @@ test.describe("HomePage tests", () => {
 
   test("shows a modal when user click on a list item", async ({ page }) => {
     await page.route(`${NASA_API_URL}*`, (route) => {
-      route.fulfill({
+      return route.fulfill({
         status: 200,
         body: JSON.stringify(searchImageResults),
       });
     });
     await page.route(`${NASA_ASSETS_URL}*`, (route) => {
-      route.fulfill({
+      return route.fulfill({
         status: 200,
         body: JSON.stringify({}),
       });
@@ -201,9 +201,9 @@ test.describe("HomePage tests", () => {
     await page.getByRole("button", { name: "Submit" }).click();
     const results = page.getByRole("main").getByRole("listitem");
     await expect(results).toHaveCount(2);
-    await page.getByRole("button", { name: "Apollo 11 footprint" }).click()
+    await page.getByRole("button", { name: "Apollo 11 footprint" }).click();
 
-    const modal = page.getByRole("dialog", { name: "Apollo 11 footprint" })
-    await expect(modal).toBeVisible()
+    const modal = page.getByRole("dialog", { name: "Apollo 11 footprint" });
+    await expect(modal).toBeVisible();
   });
 });
